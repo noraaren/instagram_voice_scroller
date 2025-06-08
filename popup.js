@@ -15,6 +15,8 @@ document.getElementById("start").addEventListener("click", () => {
         document.dispatchEvent(down);
       }
     });
+    // Send the startRecognition message to the content script
+    chrome.tabs.sendMessage(tab.id, { action: "startRecognition" });
 
     // Close the popup to return focus to the tab
     window.close();
