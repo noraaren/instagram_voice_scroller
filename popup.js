@@ -1,17 +1,11 @@
 document.getElementById("start").addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      func: () => recognition.start()
-    });
+    chrome.tabs.sendMessage(tabs[0].id, { action: "startRecognition" });
   });
 });
 
 document.getElementById("stop").addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      func: () => recognition.stop()
-    });
+    chrome.tabs.sendMessage(tabs[0].id, { action: "stopRecognition" });
   });
 });

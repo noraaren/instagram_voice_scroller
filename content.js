@@ -5,8 +5,17 @@ recognition.continuous = true;
 recognition.lang = 'en-US';
 recognition.interimResults = false;
 
-recognition.start();
-console.log("🎤 Voice control started for Instagram scrolling...");
+console.log("🎤 Voice control ready. You can start it by sending a message.");
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "startRecognition") {
+    recognition.start();
+    console.log("🎤 Voice control started for Instagram scrolling...");
+  } else if (message.action === "stopRecognition") {
+    recognition.stop();
+    console.log("🛑 Voice control stopped");
+  }
+});
 
 recognition.onresult = function(event) {
     const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
