@@ -76,21 +76,26 @@ function startNoiseDetection() {
         javascriptNode.connect(audioContext.destination);
 
         javascriptNode.onaudioprocess = () => {
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
-            analyser.getByteFrequencyData(dataArray);
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(dataArray);
 
-            // Calculate the average volume
-            const average = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+    // Calculate the average volume
+    const average = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
 
-            if (average > 0) { // Log volume only if it's greater than 0
-                console.log(`Noise detected with volume: ${average} dB`);
-            }
+    if (average > 0) { // Log volume only if it's greater than 0
+        console.log(`Noise detected with volume: ${average} dB`);
+    }
 
-            if (average > 60) { // Trigger keypress for noise above 60 dB
-                console.log("Noise threshold exceeded! Triggering keypress...");
-                simulateKeyPress(" ");
-            }
-        };
+    if (average > 90) {
+    console.log("Noise threshold exceeded! Sending trigger to native app...");
+
+    fetch('http://localhost:3000/press-down', { method: 'POST' })
+        .then(() => console.log("📨 Sent keypress trigger to native app"))
+        .catch(err => console.error("❌ Could not reach native app:", err));
+}
+
+};
+
     }).catch((error) => {
         console.error("Error accessing microphone:", error);
     });
