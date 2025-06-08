@@ -86,12 +86,10 @@ function startNoiseDetection() {
         console.log(`Noise detected with volume: ${average} dB`);
     }
 
-    if (average > 90) {
+    if (average > 70) {
     console.log("Noise threshold exceeded! Sending trigger to native app...");
 
-    fetch('http://localhost:3000/press-down', { method: 'POST' })
-        .then(() => console.log("📨 Sent keypress trigger to native app"))
-        .catch(err => console.error("❌ Could not reach native app:", err));
+    chrome.runtime.sendMessage({ action: "triggerNativeScroll" });
 }
 
 };
